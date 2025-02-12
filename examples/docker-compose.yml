@@ -1,0 +1,37 @@
+---
+version: '3.4'
+services:
+  weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: semitechnologies/weaviate:1.29.0-rc.2
+    ports:
+    - 8080:8080
+    - 50051:50051
+    volumes:
+    - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'none'
+      ENABLE_API_BASED_MODULES: 'true'
+      ENABLE_MODULES: ''
+      CLUSTER_HOSTNAME: 'node1'
+
+      # Enable Auth with API keys and configure user/apikey pairs
+      AUTHENTICATION_APIKEY_ENABLED: 'true'
+      AUTHENTICATION_APIKEY_USERS: 'admin-user,fafik'
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'my-admin-key,ffk-key'
+
+      # Enable RBAC and configure Admin/Root users
+      AUTHORIZATION_RBAC_ENABLED: 'true'
+      AUTHORIZATION_RBAC_ROOT_USERS: 'admin-user'
+volumes:
+  weaviate_data:
+...
